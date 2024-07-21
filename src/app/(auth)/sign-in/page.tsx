@@ -1,3 +1,4 @@
+'use client';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import {
@@ -9,8 +10,14 @@ import {
 } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { useAuth } from '@/hooks/auth';
 
 export default function SignIn() {
+  const { user } = useAuth({
+    middleware: 'guest',
+    redirectIfAuthenticated: '/',
+  });
+
   return (
     <Card className="mx-auto max-w-sm">
       <CardHeader>
@@ -33,11 +40,19 @@ export default function SignIn() {
           <div className="grid gap-2">
             <div className="flex items-center">
               <Label htmlFor="password">Password</Label>
-              <Link href="/forgot-password" className="ml-auto inline-block text-sm underline">
+              <Link
+                href="/forgot-password"
+                className="ml-auto inline-block text-sm underline"
+              >
                 Forgot your password?
               </Link>
             </div>
-            <Input id="password" type="password" placeholder="••••••••••" required />
+            <Input
+              id="password"
+              type="password"
+              placeholder="••••••••••"
+              required
+            />
           </div>
           <Button type="submit" className="w-full">
             Sign In

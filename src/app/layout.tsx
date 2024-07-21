@@ -2,19 +2,12 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { Inter as FontSans } from 'next/font/google';
 import { Button } from '@/components/ui/button';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { CircleUser, Menu } from 'lucide-react';
+import { Menu } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 import './globals.css';
+import NavbarLeftPortion from '@/components/layout/navbar-left-portion';
 
 const fontSans = FontSans({ subsets: ['latin'], variable: '--font-sans' });
 
@@ -133,34 +126,7 @@ export default function RootLayout({
             </SheetContent>
           </Sheet>
           <div className="flex w-full gap-2 items-center justify-end md:ml-auto">
-            {false && (
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button
-                    variant="secondary"
-                    size="icon"
-                    className="rounded-full"
-                  >
-                    <CircleUser className="h-5 w-5" />
-                    <span className="sr-only">Toggle user menu</span>
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem>Settings</DropdownMenuItem>
-                  <DropdownMenuItem>Support</DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem>Logout</DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            )}
-            <Button size="sm" asChild>
-              <Link href="/sign-in">Sign In</Link>
-            </Button>
-            <Button size="sm" asChild>
-              <Link href="/sign-up">Sign Up</Link>
-            </Button>
+            <NavbarLeftPortion />
           </div>
         </header>
         <main className="min-h-[calc(100vh_-_theme(spacing.16))] flex-1 bg-muted/40 p-4 md:p-10">
