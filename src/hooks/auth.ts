@@ -7,10 +7,12 @@ type ErrorObj = {
   response: {
     status: number;
     data: {
-      errors: any;
+      errors: { [key: string]: Array<string> };
     };
   };
 };
+
+type SetErrorsFn = (errors: ValidationErrors<any>) => void;
 
 export const useAuth = ({
   middleware,
@@ -41,13 +43,15 @@ export const useAuth = ({
     setErrors,
     ...props
   }: Readonly<{
-    setErrors: (prevErrors: any) => void;
+    setErrors: SetErrorsFn;
     username: string;
     email: string;
     password: string;
     password_confirmation: string;
   }>) => {
     await csrf();
+
+    setErrors({});
 
     axios
       .post('/sign-up', props)
@@ -59,12 +63,34 @@ export const useAuth = ({
       });
   };
 
+  const signin = async ({
+    setErrors,
+    ...props
+  }: Readonly<{
+    login: string;
+    password: string;
+    setErrors: SetErrorsFn;
+  }>) => {
+    await csrf();
+
+    setErrors({});
+
+    axios
+      .post('/sign-in', props)
+      .then(() => mutate())
+      .catch((error: ErrorObj) => {
+        if (error.response.status !== 422) throw error;
+
+        setErrors(error.response.data.errors);
+      });
+  };
+
   const logout = async () => {
     if (!error) {
-      await axios.post('/logout').then(() => mutate());
+      axios.post('/logout').then(() => mutate(undefined));
     }
-
-    router.replace('/sign-in');
+    
+    router.replace('/');
   };
 
   useEffect(() => {
@@ -81,6 +107,7 @@ export const useAuth = ({
   return {
     user,
     signup,
+    signin,
     logout,
   };
 };

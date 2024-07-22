@@ -25,7 +25,17 @@ function AuthButtons() {
   );
 }
 
-function UserDropdown({ user }: Readonly<{ user: User }>) {
+function UserDropdown({
+  user,
+  onLogout,
+}: Readonly<{
+  user: User;
+  onLogout: () => void;
+}>) {
+  const logoutHandler = () => {
+    onLogout();
+  };
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -40,17 +50,19 @@ function UserDropdown({ user }: Readonly<{ user: User }>) {
         <DropdownMenuItem>Settings</DropdownMenuItem>
         <DropdownMenuItem>Support</DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>Logout</DropdownMenuItem>
+        <DropdownMenuItem onClick={logoutHandler}>Logout</DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );
 }
 
 export default function NavbarLeftPortion() {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
+
+  console.log(user);
 
   if (user) {
-    return <UserDropdown user={user} />;
+    return <UserDropdown user={user} onLogout={logout} />;
   }
 
   return <AuthButtons />;

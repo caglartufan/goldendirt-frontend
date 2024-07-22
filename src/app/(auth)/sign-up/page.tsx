@@ -40,10 +40,7 @@ export default function SignUp() {
 
   const submitHandler = (values: ISignUpFormValues, formikHelpers: FormikHelpers<ISignUpFormValues>) => {
     signup({
-      username: values.username,
-      email: values.email,
-      password: values.password,
-      password_confirmation: values.password_confirmation,
+      ...values,
       setErrors: (errors: ValidationErrors<ISignUpFormValues>) => {
         setFormikErrors(formikHelpers.setErrors, errors);
       }
@@ -53,8 +50,8 @@ export default function SignUp() {
   const validationSchema = Yup.object({
     username: Yup.string().min(4).max(30).matches(/^[a-zA-Z0-9]+$/).required(),
     email: Yup.string().email().lowercase().max(255).required(),
-    password: Yup.string().min(7).required(),
-    password_confirmation: Yup.string().min(7).oneOf([Yup.ref('password')]).required()
+    password: Yup.string().min(8).required(),
+    password_confirmation: Yup.string().min(8).oneOf([Yup.ref('password')]).required()
   });
 
   const formik = useFormik<ISignUpFormValues>({
@@ -85,7 +82,6 @@ export default function SignUp() {
                 error={formik.errors.username}
                 label="Username"
                 placeholder="Username"
-                autoFocus
                 required
               />
             </div>
@@ -96,7 +92,7 @@ export default function SignUp() {
                 fieldProps={formik.getFieldProps('email')}
                 isInvalid={invalidity.email as boolean}
                 error={formik.errors.email}
-                label="E-mail address"
+                label="Email address"
                 placeholder="email@example.com"
                 required
               />

@@ -34,6 +34,7 @@ const FormikInput = function<Value extends string>({
   isInvalid,
   fieldProps,
   label,
+  labelRender,
   error,
   ...props
 }: Readonly<
@@ -41,21 +42,28 @@ const FormikInput = function<Value extends string>({
     isInvalid: boolean;
     fieldProps: FieldInputProps<Value>;
     label: string;
+    labelRender?: (props: { id: string; label: string; }) => React.ReactNode;
     error?: string;
   }
 >) {
   return (
     <>
-      <Label
-        htmlFor={id}
-        variant={
-          isInvalid
-            ? 'invalid'
-            : 'default'
+      {
+        id && labelRender
+          ? labelRender({ id, label })
+          : (
+              <Label
+                htmlFor={id}
+                variant={
+                  isInvalid
+                    ? 'invalid'
+                    : 'default'
+                }
+              >
+                {label}
+              </Label>
+            )
         }
-      >
-        {label}
-      </Label>
       <Input
         id={id}
         type={type}
