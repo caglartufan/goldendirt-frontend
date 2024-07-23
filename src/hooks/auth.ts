@@ -53,14 +53,22 @@ export const useAuth = ({
 
     setErrors({});
 
-    axios
-      .post('/sign-up', props)
-      .then(() => mutate())
-      .catch((error: ErrorObj) => {
-        if (error.response.status !== 422) throw error;
+    try {
+      await axios.post('/sign-up', props);
+      await mutate();
+    } catch (error) {
+      if (!error || typeof error !== 'object' || !('response' in error)) {
+        return;
+      }
 
-        setErrors(error.response.data.errors);
-      });
+      const errorObj = error as ErrorObj;
+
+      if (errorObj.response.status !== 422) {
+        throw error;
+      }
+
+      setErrors(errorObj.response.data.errors);
+    }
   };
 
   const signin = async ({
@@ -75,22 +83,32 @@ export const useAuth = ({
 
     setErrors({});
 
-    axios
-      .post('/sign-in', props)
-      .then(() => mutate())
-      .catch((error: ErrorObj) => {
-        if (error.response.status !== 422) throw error;
+    try {
+      await axios.post('/sign-in', props);
+      await mutate();
+      router.replace('/farm');
+    } catch (error) {
+      if (!error || typeof error !== 'object' || !('response' in error)) {
+        return;
+      }
 
-        setErrors(error.response.data.errors);
-      });
+      const errorObj = error as ErrorObj;
+
+      if (errorObj.response.status !== 422) {
+        throw error;
+      }
+
+      setErrors(errorObj.response.data.errors);
+    }
   };
 
   const logout = async () => {
     if (!error) {
-      axios.post('/logout').then(() => mutate(undefined));
+      await axios.post('/logout');
+      await mutate(undefined);
     }
-    
-    router.replace('/');
+
+    router.replace('/sign-in');
   };
 
   useEffect(() => {

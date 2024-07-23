@@ -53,7 +53,6 @@ export default function SignIn() {
     values: ISignInFormValues,
     formikHelpers: FormikHelpers<ISignInFormValues>
   ) => {
-    console.log(values);
     signin({
       ...values,
       setErrors: (errors: ValidationErrors<ISignInFormValues>) => {
