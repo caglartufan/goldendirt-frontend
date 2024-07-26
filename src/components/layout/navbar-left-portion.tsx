@@ -59,8 +59,6 @@ function UserDropdown({
 export default function NavbarLeftPortion() {
   const { user, logout } = useAuth();
 
-  console.log(user);
-
   if (user) {
     return <UserDropdown user={user} onLogout={logout} />;
   }

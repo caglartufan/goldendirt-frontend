@@ -9,7 +9,7 @@ export default function StatsBar() {
         <span className="font-medium">
           Gold
         </span>
-        <div className="flex items-center px-2 align-top text-yellow-400">
+        <div className="flex items-center px-2 align-top text-gold">
           <span className="inline-block font-bold me-1">
             5000
           </span>
