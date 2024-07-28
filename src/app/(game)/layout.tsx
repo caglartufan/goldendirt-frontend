@@ -10,35 +10,52 @@ export default function GameLayout({
   children: React.ReactNode;
 }>) {
   const isWelcomed = false;
-  const [isConnected, setIsConnected] = useState<boolean>(false);
-  const [transport, setTransport] = useState<string>('N/A');
 
   useEffect(() => {
     if (socket.connected) {
       onConnect();
     }
 
+    function onError(error: any) {
+      console.log('ERROR OCCURED', error);
+    }
+
+    function onConnectError(error: Error) {
+      console.log('Connect error:', error);
+      const description =
+        'description' in error ? error.description : undefined;
+      if (description === 403) {
+        socket.disconnect();
+        console.log(
+          'Socket.io connection failed due to np API token being sent to the server.'
+        );
+      }
+    }
+
     function onConnect() {
-      setIsConnected(true);
-      setTransport(socket.io.engine.transport.name);
-
-      socket.io.engine.on('upgrade', (transport) => {
-        setTransport(transport.name);
-      });
-
       console.log('Socket ID:', socket.id);
+      socket.emit('ping');
+    }
+
+    function onPong(username: string) {
+      console.log(username + ' ponged!');
     }
 
     function onDisconnect() {
-      setIsConnected(false);
-      setTransport('N/A');
+      console.log('Disconneted!');
     }
 
     socket.on('connect', onConnect);
+    socket.on('error', onError);
+    socket.on('connect_error', onConnectError);
+    socket.on('pong', onPong);
     socket.on('disconnect', onDisconnect);
 
     return () => {
       socket.off('connect', onConnect);
+      socket.off('error', onError);
+      socket.off('connect_error', onConnectError);
+      socket.off('pong', onPong);
       socket.off('disconnect', onDisconnect);
     };
   }, []);
@@ -48,10 +65,6 @@ export default function GameLayout({
       <StatsBar />
       {!isWelcomed && <WelcomeAlert className="mb-6" />}
       <div>{children}</div>
-      <div>
-        <p>Status: { isConnected ? "connected" : "disconnected" }</p>
-        <p>Transport: { transport }</p>
-      </div>
     </>
   );
 }
