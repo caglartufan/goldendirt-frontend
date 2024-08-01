@@ -18,6 +18,10 @@ const LINKS = {
       href: '/farm',
       text: 'Farm',
     },
+    {
+      href: '/market',
+      text: 'Market'
+    }
   ],
 };
 

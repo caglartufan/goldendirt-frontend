@@ -1,5 +1,5 @@
 'use client';
-import { LandsGridView } from '@/components/game/farm/lands/lands-grid-view';
+import { useContext, useEffect, useState } from 'react';
 import {
   Card,
   CardContent,
@@ -8,10 +8,27 @@ import {
 } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
-import { useState } from 'react';
+import { LandsGridView } from '@/components/game/farm/lands/lands-grid-view';
+import { SocketContext } from '@/context/socket';
+import { ponged } from '@/lib/socket-handlers/misc';
 
 export default function Farm() {
   const [isTableView, setIsTableView] = useState<boolean>(false);
+  const socket = useContext(SocketContext);
+
+  useEffect(() => {
+    if (!socket) {
+      return;
+    }
+
+    // Misc
+    socket.on('misc:pong', ponged);
+
+    return () => {
+      // Misc
+      socket.off('misc:pong', ponged);
+    };
+  }, [socket]);
 
   return (
     <Card>

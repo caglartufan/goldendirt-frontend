@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { useParams, usePathname, useRouter } from 'next/navigation';
 import useSWR from 'swr';
 import axios from '@/lib/axios';
+import { User, ValidationErrors } from '@/types';
 
 type ErrorObj = {
   response: {
