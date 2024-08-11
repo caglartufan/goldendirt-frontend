@@ -11,6 +11,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { CircleUser } from 'lucide-react';
 import { useAuth } from '@/hooks/auth';
+import { type User } from '@/types';
 
 function AuthButtons() {
   return (

@@ -1,19 +1,8 @@
 import { useEffect } from 'react';
-import { useParams, usePathname, useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import useSWR from 'swr';
 import axios from '@/lib/axios';
-import { User, ValidationErrors } from '@/types';
-
-type ErrorObj = {
-  response: {
-    status: number;
-    data: {
-      errors: { [key: string]: Array<string> };
-    };
-  };
-};
-
-type SetErrorsFn = (errors: ValidationErrors<any>) => void;
+import { User, ErrorObj, SetErrorsFn } from '@/types';
 
 export const useAuth = ({
   middleware,
@@ -23,16 +12,15 @@ export const useAuth = ({
   redirectIfAuthenticated?: string;
 }> = {}) => {
   const router = useRouter();
-  const params = useParams();
   const pathname = usePathname();
 
   const {
     data: user,
     error,
     mutate,
-  } = useSWR<User, ErrorObj, '/api/user'>(
-    '/api/user',
-    async (arg: '/api/user') => {
+  } = useSWR<User, ErrorObj, '/api/profile'>(
+    '/api/profile',
+    async (arg: '/api/profile') => {
       const response = await axios.get<User>(arg);
       return response.data;
     }

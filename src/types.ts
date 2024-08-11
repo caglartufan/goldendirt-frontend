@@ -1,35 +1,50 @@
-export type User = {
+import { DateTime, Duration } from 'luxon';
+
+// Enums
+export enum FarmFieldStatus {
+  Idle = 'IDLE',
+  Planted = 'PLANTED',
+  Barren = 'BARREN',
+}
+
+// Models
+export interface User {
   id: number;
   username: string;
   email: string;
-  email_verified_at: Date | null;
-  created_at: Date;
-  updated_at: Date;
-};
-
-export type Crop = {
-  id: number;
-  name: string;
-  timeToGrowUpInSeconds: number;
-  levelRequired: number;
-  xpReward: number;
-  image?: string;
-};
-
-export enum LAND_STATUS {
-  IDLE = 'idle',
-  BARREN = 'barren',
-  GROWING_UP = 'growing-up',
-  GROWN_UP = 'grown-up',
+  level: number;
+  xp: number;
+  golds: number;
+  email_verified_at: string | null;
+  created_at: DateTime | string;
+  updated_at: DateTime | string;
 }
 
-export type Land = {
+export interface FarmField {
   id: number;
-  status: LAND_STATUS;
-  growProgress?: number;
-  crop?: Crop;
-};
+  user_id: number;
+  status: FarmFieldStatus;
+  crop_id: number | null;
+  crop: Crop | null;
+  planted_at: DateTime | string | null;
+  harvestable_at: DateTime | string | null;
+  created_at: DateTime | string;
+  updated_at: DateTime | string;
+  seconds_remaining_to_harvest?: Duration;
+  progress?: number;
+}
 
+export interface Crop {
+  id: number;
+  name: string;
+  image: string;
+  seconds_to_grow_up: number;
+  seed_cost_at_market: number;
+  xp_reward: number;
+  level_required_to_plant: number;
+}
+
+// Misc
 export type ValidationErrors<Values> = {
   [field in keyof Values]: string | Array<string>;
 };
@@ -37,3 +52,14 @@ export type ValidationErrors<Values> = {
 export type FormikInvalidities<Values> = {
   [field in keyof Values]: boolean;
 };
+
+export interface ErrorObj {
+  response: {
+    status: number;
+    data: {
+      errors: { [key: string]: Array<string> };
+    };
+  };
+}
+
+export type SetErrorsFn = (errors: ValidationErrors<any>) => void;

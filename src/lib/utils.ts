@@ -1,6 +1,7 @@
 import { type ClassValue, clsx } from 'clsx';
-import { FormikErrors, FormikProps, FormikTouched } from 'formik';
+import { FormikErrors, FormikTouched } from 'formik';
 import { twMerge } from 'tailwind-merge';
+import { FormikInvalidities, ValidationErrors } from '@/types';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));

@@ -8,7 +8,7 @@ import {
 } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
-import { LandsGridView } from '@/components/game/farm/lands/lands-grid-view';
+import { FarmFieldsGridView } from '@/components/game/farm/farm-fields-grid-view';
 import { SocketContext } from '@/context/socket';
 import { ponged } from '@/lib/socket-handlers/misc';
 
@@ -42,7 +42,7 @@ export default function Farm() {
         </div>
       </CardHeader>
       <CardContent>
-        <LandsGridView />
+        <FarmFieldsGridView />
       </CardContent>
     </Card>
   );
