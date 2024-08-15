@@ -13,7 +13,9 @@ export interface User {
   username: string;
   email: string;
   level: number;
-  xp: number;
+  total_xp: number;
+  current_xp: number;
+  xp_required_for_next_level: number;
   golds: number;
   email_verified_at: string | null;
   created_at: DateTime | string;

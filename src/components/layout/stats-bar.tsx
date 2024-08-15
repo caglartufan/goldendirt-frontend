@@ -30,9 +30,11 @@ export default function StatsBar() {
           <Star className="w-6 h-6 text-sky-400 fill-sky-400" />
         </div>
         <div className="flex flex-col justify-center px-2 border-e">
-          <span className="text-xs font-medium">250/1000</span>
+          <span className="text-xs font-medium">
+            {user.current_xp}/{user.xp_required_for_next_level}
+          </span>
           <Progress
-            value={25}
+            value={Math.floor(user.current_xp / user.xp_required_for_next_level * 100)}
             className="w-[200px] h-2 bg-sky-200"
             indicatorClassName="bg-sky-400"
           />
